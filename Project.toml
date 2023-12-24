@@ -1,0 +1,11 @@
+name = "TEBD"
+uuid = "d8bfcff0-7c0d-4ae4-926a-107ec62ab10f"
+authors = ["Guo Chu <guochu604b@gmail.com>"]
+version = "0.0.1"
+
+[deps]
+DMRG = "1240110f-4488-488b-9691-4f58b4220f75"
+Hamiltonians = "ce941b29-2bb2-4194-8c5f-a969bff03822"
+Logging = "56ddb016-857b-54e1-b83d-db4d58db5568"
+Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
+SphericalTensors = "810931ec-fc2f-499d-8094-ffc35d8d9f19"
