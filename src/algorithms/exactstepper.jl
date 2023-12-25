@@ -80,5 +80,5 @@ timeevo!(state::ExactMPS,  h::Union{MPO, MPOHamiltonian, QuantumOperator}, stepp
 
 function timeevo!(state::MPS,  h::Union{MPO, MPOHamiltonian, QuantumOperator}, stepper::ExactStepper)
 	cache=timeevo_cache(h, stepper, state)
-	return make_step!(h, stepper, cache.state, cache)
+	return make_step!(h, stepper, cache.env.state, cache)
 end 
