@@ -17,7 +17,7 @@ using Reexport
 using SphericalTensors
 const TK = SphericalTensors
 @reexport using DMRG, Hamiltonians
-using DMRG: AbstractCache, ExactCache, ExpectationCache, stable_tsvd, stable_tsvd!, DefaultTruncation
+using DMRG: AbstractCache, ExactCache, ExpectationCache, stable_tsvd, stable_tsvd!, DefaultTruncation, unsafe_mpotensor_adjoint, storage
 
 
 # circuit for TEBD

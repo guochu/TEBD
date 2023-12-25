@@ -66,19 +66,19 @@ end
 
 function _change_stepsize(x::TDVP1, stepsize::Number)
 	if !(x.stepsize ≈ stepsize)
-		x = TDVP1(stepsize=stepsize, D=x.D, exptol=x.exptol, ishermitian=x.ishermitian, verbosity=x.verbosity)
+		x = TDVP1(stepsize=stepsize, D=x.D, tolexp=x.tolexp, ishermitian=x.ishermitian, verbosity=x.verbosity)
 	end
 	return x
 end
 function _change_stepsize(x::TDVP2, stepsize::Number)
 	if !(x.stepsize ≈ stepsize)
-		x = TDVP2(stepsize=stepsize, exptol=x.exptol, ishermitian=x.ishermitian, trunc=x.trunc, verbosity=x.verbosity)
+		x = TDVP2(stepsize=stepsize, tolexp=x.tolexp, ishermitian=x.ishermitian, trunc=x.trunc, verbosity=x.verbosity)
 	end
 	return x
 end
 function _change_stepsize(x::TDVP1S, stepsize::Number)
 	if !(x.stepsize ≈ stepsize)
-		x = TDVP1S(stepsize=stepsize, exptol=x.exptol, ishermitian=x.ishermitian, trunc=x.trunc, expan=x.expan, verbosity=x.verbosity)
+		x = TDVP1S(stepsize=stepsize, tolexp=x.tolexp, ishermitian=x.ishermitian, trunc=x.trunc, expan=x.expan, verbosity=x.verbosity)
 	end
 	return x
 end
