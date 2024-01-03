@@ -1,5 +1,6 @@
 push!(LOAD_PATH, dirname(dirname(Base.@__DIR__)) * "/SphericalTensors/src")
 push!(LOAD_PATH, dirname(dirname(Base.@__DIR__)) * "/DMRG/src")
+push!(LOAD_PATH, dirname(dirname(Base.@__DIR__)) * "/InfiniteDMRG/src")
 push!(LOAD_PATH, dirname(dirname(Base.@__DIR__)) * "/Hamiltonians/src")
 
 push!(LOAD_PATH, dirname(Base.@__DIR__) * "/src")
@@ -13,4 +14,5 @@ include("util.jl")
 
 ## algorithms
 include("algorithm/tebd.jl")
+include("algorithm/itebd.jl")
 include("algorithm/correlations.jl")

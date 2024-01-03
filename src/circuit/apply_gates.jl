@@ -54,7 +54,7 @@ function bond_evolution4(bondmpo, svectorj1, mpsj1, svectorj2, mpsj2, svectorj3,
 	return u, s, u2, s2, u3, s3, permute(v3, (1,2), (3,)), max(err1, err2, err3)
 end
 
-function _move!(psi::AbstractMPS, i::Int, j::Int, trunc::TruncationScheme)
+function _move!(psi, i::Int, j::Int, trunc::TruncationScheme)
 	L = length(psi)
 	(i <= L && j <= L) || throw(BoundsError("index out of range."))
 	DMRG.svectors_uninitialized(psi) && canonicalize!(psi)
@@ -77,14 +77,14 @@ function _move!(psi::AbstractMPS, i::Int, j::Int, trunc::TruncationScheme)
 end
 
 
-function _apply_impl(kk::Tuple{Int}, m::AbstractTensorMap{S, 1, 1}, state::AbstractMPS, trunc::TruncationScheme) where S
+function _apply_impl(kk::Tuple{Int}, m::AbstractTensorMap{S, 1, 1}, state, trunc::TruncationScheme) where S
 	key = kk[1]
 	@tensor tmp[-1 -2; -3] := m[-2, 1] * state[key][-1,1,-3]
 	state[key] = tmp
 	return 0.
 end
 
-function _apply_impl(key::Tuple{Int, Int}, m::AbstractTensorMap{S, 2, 2}, mps::AbstractMPS, trunc::TruncationScheme) where S
+function _apply_impl(key::Tuple{Int, Int}, m::AbstractTensorMap{S, 2, 2}, mps, trunc::TruncationScheme) where S
 	i, j = key
 	if i+1==j
 		mps[j-1], mps.s[j], mps[j], err = bond_evolution(m, mps.s[j-1], mps[j-1], mps.s[j], mps[j], trunc)
@@ -112,7 +112,7 @@ function is_nn_pos(key::NTuple{N, Int}) where N
 	return true
 end
 
-function _apply_impl(key::Tuple{Int, Int, Int}, m::AbstractTensorMap{S, 3, 3}, mps::AbstractMPS, trunc::TruncationScheme) where S
+function _apply_impl(key::Tuple{Int, Int, Int}, m::AbstractTensorMap{S, 3, 3}, mps, trunc::TruncationScheme) where S
 	i, j, k = key
 	if is_nn_pos(key)
 		mps[j-1], mps.s[j], mps[j], mps.s[j+1], mps[j+1], err = bond_evolution3(
@@ -134,7 +134,7 @@ function _apply_impl(key::Tuple{Int, Int, Int}, m::AbstractTensorMap{S, 3, 3}, m
 	return err
 end
 
-function _apply_impl(key::Tuple{Int, Int, Int, Int}, m::AbstractTensorMap{S, 4, 4}, mps::AbstractMPS, trunc::TruncationScheme) where S
+function _apply_impl(key::Tuple{Int, Int, Int, Int}, m::AbstractTensorMap{S, 4, 4}, mps, trunc::TruncationScheme) where S
 	i, j, k, l = key
 	if is_nn_pos(key)
 		mps[j-1], mps.s[j], mps[j], mps.s[j+1], mps[j+1], mps.s[j+2], mps[j+2], err = bond_evolution4(
@@ -161,17 +161,23 @@ function _apply_impl(key::Tuple{Int, Int, Int, Int}, m::AbstractTensorMap{S, 4, 
 	return err
 end
 
-function apply!(s::AbstractQuantumGate, mps::AbstractMPS; trunc::TruncationScheme=DefaultTruncation) 
+apply!(s::AbstractQuantumGate, mps::MPS; kwargs...) = _apply!(s, mps; kwargs...)
+apply!(s::AbstractQuantumGate, mps::InfiniteMPS; kwargs...) = _apply!(s, mps; kwargs...)
+apply!(circuit::AbstractQuantumCircuit, mps::MPS; kwargs...) = _apply!(circuit, mps; kwargs...)
+apply!(circuit::AbstractQuantumCircuit, mps::InfiniteMPS; kwargs...) = _apply!(circuit, mps; kwargs...)
+
+
+
+function _apply!(s::AbstractQuantumGate, mps; trunc::TruncationScheme=DefaultTruncation) 
 	(length(positions(s)) <= 4) || throw(ArgumentError("only 4-body (or less) gates are currently allowed"))
 	DMRG.svectors_uninitialized(mps) && canonicalize!(mps)
 	_apply_impl(positions(s), op(s), mps, trunc)
 	return mps
 end 
 
-function apply!(circuit::AbstractQuantumCircuit, mps::AbstractMPS; kwargs...)
+function _apply!(circuit::AbstractQuantumCircuit, mps; kwargs...)
 	for gate in circuit
-		apply!(gate, mps; kwargs...)
+		_apply!(gate, mps; kwargs...)
 	end
 	return mps
 end
-

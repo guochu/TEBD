@@ -37,20 +37,20 @@ end
 
 is_lower_than(ks, L::Int) = all(x -> length(x) < L, ks)
 function _is_nn_single(key)
-	(length(key) != 2) && error("input should be a tuple of 2.")
+	(length(key) != 2) && error("input should be a tuple of 2")
 	return key[1]+1 == key[2]
 end
 
 is_nn(ks) = all(_is_nn_single, ks)
 
 function split_nn_ham(ham::QuantumOperator)
-	is_nn(keys(ham)) || error("splt nn requires a nearest neighbour hamiltonian.")
+	is_nn(keys(ham)) || error("splt nn requires a nearest neighbour hamiltonian")
 	ham_even = typeof(ham)(physical_spaces(ham))
 	ham_odd = typeof(ham)(physical_spaces(ham))
 	for item in qterms(ham)
 		@assert length(positions(item)) == 1
 		i, j = positions(item)
-		(j == i+1) || error("hamiltonian contains non-nearest-neighbour term.")
+		(j == i+1) || error("hamiltonian contains non-nearest-neighbour term")
 		if i%2==0
 			push!(ham_even, item)
 		else
@@ -197,10 +197,14 @@ namely tspan = (t_start, t_end)
 'ham' could either be a Hamiltonian or a Super Hamiltonian, and could be time-dependent 
 with 'isconstant(ham)=false'
 
+This function is also used for infinite TEBD, in which case the order is really a fake order
+
 algorithm reference: "Higher order decompositions of ordered operator exponentials"
 """
-function trotter_propagator(ham::QuantumOperator, tspan::Tuple{<:Number, <:Number}; order::Int=2, stepsize::Number=0.01)
-	ham = absorb_one_bodies(ham)
+trotter_propagator(ham::QuantumOperator, tspan::Tuple{<:Number, <:Number}; kwargs...) = _trotter_propagator(absorb_one_bodies(ham), tspan; kwargs...)
+trotter_propagator(ham::QuantumOperator, dt::Number; kwargs...) = trotter_propagator(ham, (0, dt); kwargs...)
+
+function _trotter_propagator(ham::QuantumOperator, tspan::Tuple{<:Number, <:Number}; order::Int=2, stepsize::Number=0.01)
 	p = div(order, 2)
 	(p * 2 == order) || throw(ArgumentError("only even order supported")) 
 	dt = stepsize
