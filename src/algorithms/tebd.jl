@@ -20,7 +20,7 @@ end
 
 function _join(v::Vector{<:MPOTensor})
 	isempty(v) && throw(ArgumentError())
-	util = Hamiltonians.get_trivial_leg(v[1])
+	util = GeneralHamiltonians.get_trivial_leg(v[1])
 	if length(v) == 1
 		@tensor r[-1 ; -2] := conj(util[1]) * v[1][1,-1,2,-2] * util[2]
 	elseif length(v) == 2

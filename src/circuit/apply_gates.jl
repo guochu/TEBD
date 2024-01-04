@@ -161,10 +161,10 @@ function _apply_impl(key::Tuple{Int, Int, Int, Int}, m::AbstractTensorMap{S, 4, 
 	return err
 end
 
-apply!(s::AbstractQuantumGate, mps::MPS; kwargs...) = _apply!(s, mps; kwargs...)
-apply!(s::AbstractQuantumGate, mps::InfiniteMPS; kwargs...) = _apply!(s, mps; kwargs...)
-apply!(circuit::AbstractQuantumCircuit, mps::MPS; kwargs...) = _apply!(circuit, mps; kwargs...)
-apply!(circuit::AbstractQuantumCircuit, mps::InfiniteMPS; kwargs...) = _apply!(circuit, mps; kwargs...)
+DMRG.apply!(s::AbstractQuantumGate, mps::MPS; kwargs...) = _apply!(s, mps; kwargs...)
+DMRG.apply!(s::AbstractQuantumGate, mps::InfiniteMPS; kwargs...) = _apply!(s, mps; kwargs...)
+DMRG.apply!(circuit::AbstractQuantumCircuit, mps::MPS; kwargs...) = _apply!(circuit, mps; kwargs...)
+DMRG.apply!(circuit::AbstractQuantumCircuit, mps::InfiniteMPS; kwargs...) = _apply!(circuit, mps; kwargs...)
 
 
 

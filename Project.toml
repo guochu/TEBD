@@ -5,7 +5,8 @@ version = "0.0.1"
 
 [deps]
 DMRG = "1240110f-4488-488b-9691-4f58b4220f75"
-Hamiltonians = "ce941b29-2bb2-4194-8c5f-a969bff03822"
+GeneralHamiltonians = "bec6ee38-6105-4457-a6c6-43c77fbcbb25"
+InfiniteDMRG = "c4d23ee2-b445-4f35-9968-b1d50be634b8"
 Logging = "56ddb016-857b-54e1-b83d-db4d58db5568"
 Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 SphericalTensors = "810931ec-fc2f-499d-8094-ffc35d8d9f19"

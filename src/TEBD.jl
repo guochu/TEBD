@@ -16,10 +16,9 @@ using Logging: @warn
 using Reexport
 using SphericalTensors
 const TK = SphericalTensors
-@reexport using DMRG, InfiniteDMRG, Hamiltonians
+@reexport using DMRG, InfiniteDMRG, GeneralHamiltonians
 using DMRG: AbstractCache, ExactCache, ExpectationCache, stable_tsvd, stable_tsvd!, DefaultTruncation, unsafe_mpotensor_adjoint, storage
-using InfiniteDMRG
-import Hamiltonians: apply!
+
 
 # circuit for TEBD
 include("circuit/gate.jl")

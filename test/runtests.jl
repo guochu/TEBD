@@ -1,12 +1,11 @@
-push!(LOAD_PATH, dirname(dirname(Base.@__DIR__)) * "/SphericalTensors/src")
 push!(LOAD_PATH, dirname(dirname(Base.@__DIR__)) * "/DMRG/src")
 push!(LOAD_PATH, dirname(dirname(Base.@__DIR__)) * "/InfiniteDMRG/src")
-push!(LOAD_PATH, dirname(dirname(Base.@__DIR__)) * "/Hamiltonians/src")
+push!(LOAD_PATH, dirname(dirname(Base.@__DIR__)) * "/GeneralHamiltonians/src")
 
 push!(LOAD_PATH, dirname(Base.@__DIR__) * "/src")
 
 using Test, Random
-using SphericalTensors, TEBD
+using TEBD
 
 Random.seed!(1234)
 

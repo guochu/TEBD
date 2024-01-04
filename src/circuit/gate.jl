@@ -27,21 +27,21 @@ QuantumGate(pos::NTuple{N, Int}, m::AbstractTensorMap{S}) where {S <: Elementary
 QuantumGate(pos::Int, m::AbstractTensorMap{S, 1, 1})  where {S <: ElementarySpace} = QuantumGate((pos,), m)
 
 
-Hamiltonians.positions(g::QuantumGate) = g.positions
-Hamiltonians.op(g::QuantumGate) = g.op
+GeneralHamiltonians.positions(g::QuantumGate) = g.positions
+GeneralHamiltonians.op(g::QuantumGate) = g.op
 
-shift(g::QuantumGate, i::Int) = QuantumGate(positions(g) .+ i, op(g))
+GeneralHamiltonians.shift(g::QuantumGate, i::Int) = QuantumGate(positions(g) .+ i, op(g))
 
 
 struct AdjointQuantumGate{S <: ElementarySpace, N, M <: AbstractTensorMap{S}} <: AbstractQuantumGate{S}
 	parent::QuantumGate{S, N, M}
 end
 
-Hamiltonians.positions(g::AdjointQuantumGate) = positions(g.parent)
-Hamiltonians.op(g::AdjointQuantumGate) = op(g.parent)'
+GeneralHamiltonians.positions(g::AdjointQuantumGate) = positions(g.parent)
+GeneralHamiltonians.op(g::AdjointQuantumGate) = op(g.parent)'
 
 
-shift(g::AdjointQuantumGate, i::Int) = shift(g.parent, i)'
+GeneralHamiltonians.shift(g::AdjointQuantumGate, i::Int) = shift(g.parent, i)'
 
 Base.adjoint(g::QuantumGate) = AdjointQuantumGate(g)
 Base.adjoint(g::AdjointQuantumGate) = g.parent
