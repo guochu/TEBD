@@ -2,10 +2,12 @@ push!(LOAD_PATH, dirname(dirname(Base.@__DIR__)) * "/DMRG/src")
 push!(LOAD_PATH, dirname(dirname(Base.@__DIR__)) * "/InfiniteDMRG/src")
 push!(LOAD_PATH, dirname(dirname(Base.@__DIR__)) * "/GeneralHamiltonians/src")
 
-push!(LOAD_PATH, dirname(Base.@__DIR__) * "/src")
-
 using Test, Random
-using TEBD
+
+# push!(LOAD_PATH, dirname(Base.@__DIR__) * "/src")
+# using TEBD
+
+include("../src/includes.jl")
 
 Random.seed!(1234)
 

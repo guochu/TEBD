@@ -104,14 +104,15 @@ function infinite_xxz_mpo()
 
     initial_state = [-0.5, 0.5]
     state = prodimps(ComplexF64, [pspace for i in 1:length(initial_state)], initial_state)
-    canonicalize!(state)    
+    orth = Orthogonalize(trunc=truncdimcutoff(D=200, ϵ=1.0e-8, add_back=0), normalize=true)
+    canonicalize!(state, alg=orth)  
 
     observer = QTerm(1=>sp, 2=>sp')
     obs = [expectation(observer, state)]
 
     for i in 1:10
         state = mpo * state
-        canonicalize!(state)
+        canonicalize!(state, alg=orth)
         push!(obs, expectation(observer, state))
     end 
     return obs
@@ -136,20 +137,22 @@ function infinite_xxz_mpo2()
 
     initial_state = [-0.5, 0.5]
     state = prodimps(ComplexF64, [pspace for i in 1:length(initial_state)], initial_state)
-    canonicalize!(state)    
+    orth = Orthogonalize(trunc=truncdimcutoff(D=200, ϵ=1.0e-8, add_back=0), normalize=true)
+    canonicalize!(state, alg=orth)  
 
     observer = QTerm(1=>sp, 2=>sp')
     obs = [expectation(observer, state)]
 
     for i in 1:10
         state = mpo1 * state
-        canonicalize!(state)
+        canonicalize!(state, alg=orth)
         state = mpo2 * state
-        canonicalize!(state)
+        canonicalize!(state, alg=orth)
         push!(obs, expectation(observer, state))
     end 
     return obs
 end
+
 
 
 @testset "TEBD: comparison with TEBD, 1st and 2nd order TimeEvoMPO" begin

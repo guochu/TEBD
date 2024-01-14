@@ -132,7 +132,7 @@ _gs_unitary_tt_corr_a_bt(h, A::MPO, B::AdjointMPO, state, gs_E::Real, times, ste
 	for an open system with superoperator h, and a, b to be normal operators, compute <a(t)b> if revere=false and <a b(t)> if reverse=true.
 	For open system see definitions of <a(t)b> or <a b(t)> on Page 146 of Gardiner and Zoller (Quantum Noise)
 """
-function correlation_2op_1t(h::Union{QuantumOperator, AbstractMPO}, a::AbstractMPO, b::AbstractMPO, state::AbstractMPS, times::Vector{<:Real};
+function correlation_2op_1t(h::Union{QuantumOperator, MPO}, a::Union{MPO, AdjointMPO}, b::Union{MPO, AdjointMPO}, state::AbstractMPS, times::Vector{<:Real};
 	stepper::AbstractStepper=TEBDStepper(tspan=(0., 0.01), stepsize=0.01), reverse::Bool=false)
 	if scalartype(state) <: Real
 		state = complex(state)
@@ -142,10 +142,10 @@ function correlation_2op_1t(h::Union{QuantumOperator, AbstractMPO}, a::AbstractM
 end
 
 """
-	gs_correlation_2op_1t(h::Union{QuantumOperator, AbstractMPO}, a::AbstractMPO, b::AbstractMPO, state::MPS, times::Vector{<:Real}; kwargs...)
+	gs_correlation_2op_1t(h::Union{QuantumOperator, MPO}, a::MPO, b::MPO, state::MPS, times::Vector{<:Real}; kwargs...)
 	ground state two-time correlation
 """
-function gs_correlation_2op_1t(h::Union{QuantumOperator, AbstractMPO}, a::AbstractMPO, b::AbstractMPO, state::AbstractMPS, times::Vector{<:Real};
+function gs_correlation_2op_1t(h::Union{QuantumOperator, MPO}, a::Union{MPO, AdjointMPO}, b::Union{MPO, AdjointMPO}, state::AbstractMPS, times::Vector{<:Real};
 	stepper::AbstractStepper=TEBDStepper(tspan=(0., 0.01), stepsize=0.01), 
 	gs_energy::Real = real(expectation(h, state)), reverse::Bool=false)
 	if scalartype(state) <: Real
@@ -160,17 +160,17 @@ end
 	reverse::Bool=false) 
 	for a unitary system with hamiltonian h, compute <a(τ)b> if revere=false and <a b(τ)> if reverse=true
 """
-function correlation_2op_1τ(h::Union{QuantumOperator, AbstractMPO}, a::AbstractMPO, b::AbstractMPO, state::AbstractMPS, times::Vector{<:Real};
+function correlation_2op_1τ(h::Union{QuantumOperator, MPO}, a::Union{MPO, AdjointMPO}, b::Union{MPO, AdjointMPO}, state::AbstractMPS, times::Vector{<:Real};
 	stepper::AbstractStepper=TEBDStepper(tspan=(0., 0.01), stepsize=0.01), reverse::Bool=false)
 	times = -times
 	reverse ? _unitary_tt_corr_a_bt(h, a, b, state, times, stepper) : _unitary_tt_corr_at_b(h, a, b, state, times, stepper)
 end
 
 """
-	gs_correlation_2op_1τ(h::Union{QuantumOperator, AbstractMPO}, a::AbstractMPO, b::AbstractMPO, state::MPS, times::Vector{<:Real}; kwargs...)
+	gs_correlation_2op_1τ(h::Union{QuantumOperator, MPO}, a::MPO, b::MPO, state::MPS, times::Vector{<:Real}; kwargs...)
 	ground state two imaginary time correlation
 """
-function gs_correlation_2op_1τ(h::Union{QuantumOperator, AbstractMPO}, a::AbstractMPO, b::AbstractMPO, state::AbstractMPS, times::Vector{<:Real};
+function gs_correlation_2op_1τ(h::Union{QuantumOperator, MPO}, a::Union{MPO, AdjointMPO}, b::Union{MPO, AdjointMPO}, state::AbstractMPS, times::Vector{<:Real};
 	stepper::AbstractStepper=TEBDStepper(tspan=(0., 0.01), stepsize=0.01), 
 	gs_energy::Real = real(expectation(h, state)),
 	reverse::Bool=false)
@@ -240,21 +240,21 @@ _exact_unitary_tt_corr_a_bt(h, A::MPO, B::AdjointMPO, state, times) = _exact_uni
 
 
 # exact diagonalization, used for small systems or debug
-function exact_correlation_2op_1t(h::AbstractMPO, a::AbstractMPO, b::AbstractMPO, state::AbstractMPS, times::Vector{<:Real}; reverse::Bool=false)
+function exact_correlation_2op_1t(h::MPO, a::Union{MPO, AdjointMPO}, b::Union{MPO, AdjointMPO}, state::AbstractMPS, times::Vector{<:Real}; reverse::Bool=false)
 	if scalartype(state) <: Real
 		state = complex(state)
 	end
 	times = -im .* times
 	reverse ? _exact_unitary_tt_corr_a_bt(h, a, b, state, times) : _exact_unitary_tt_corr_at_b(h, a, b, state, times)
 end
-function exact_correlation_2op_1t(h::QuantumOperator, a::AbstractMPO, b::AbstractMPO, state::AbstractMPS, times::Vector{<:Real}; reverse::Bool=false)
+function exact_correlation_2op_1t(h::QuantumOperator, a::Union{MPO, AdjointMPO}, b::Union{MPO, AdjointMPO}, state::AbstractMPS, times::Vector{<:Real}; reverse::Bool=false)
 	return exact_correlation_2op_1t(MPO(h), a, b, state, times, reverse=reverse)
 end
-function exact_correlation_2op_1τ(h::AbstractMPO, a::AbstractMPO, b::AbstractMPO, state::AbstractMPS, times::Vector{<:Real}; reverse::Bool=false)
+function exact_correlation_2op_1τ(h::MPO, a::Union{MPO, AdjointMPO}, b::Union{MPO, AdjointMPO}, state::AbstractMPS, times::Vector{<:Real}; reverse::Bool=false)
 	times = -times
 	reverse ? _exact_unitary_tt_corr_a_bt(h, a, b, state, times) : _exact_unitary_tt_corr_at_b(h, a, b, state, times)
 end
-function exact_correlation_2op_1τ(h::QuantumOperator, a::AbstractMPO, b::AbstractMPO, state::AbstractMPS, times::Vector{<:Real}; reverse::Bool=false)
+function exact_correlation_2op_1τ(h::QuantumOperator, a::Union{MPO, AdjointMPO}, b::Union{MPO, AdjointMPO}, state::AbstractMPS, times::Vector{<:Real}; reverse::Bool=false)
 	return exact_correlation_2op_1τ(MPO(h), a, b, state, times, reverse=reverse)
 end
 

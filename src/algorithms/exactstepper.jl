@@ -30,7 +30,7 @@ end
 
 HomogeousExactCache(h::Union{MPO, MPOHamiltonian}, stepper::ExactStepper, state::ExactMPS) = HomogeousExactCache(environments(h, state), stepper)
 
-function recalculate!(x::HomogeousExactCache, mpo::AbstractMPO, stepper::ExactStepper, state::ExactMPS)
+function recalculate!(x::HomogeousExactCache, mpo::MPO, stepper::ExactStepper, state::ExactMPS)
 	if !((x.env.state === state) && (x.env.mpo === mpo))
 		return HomogeousExactCache(environments(mpo, state), stepper)
 	else
@@ -38,7 +38,7 @@ function recalculate!(x::HomogeousExactCache, mpo::AbstractMPO, stepper::ExactSt
 	end
 end
 
-function make_step!(mpo::AbstractMPO, stepper::ExactStepper, state::ExactMPS, x::HomogeousExactCache) 
+function make_step!(mpo::MPO, stepper::ExactStepper, state::ExactMPS, x::HomogeousExactCache) 
 	x = recalculate!(x, mpo, stepper, state)
 	env = exact_timeevolution!(x.env, stepper.δ, ishermitian=stepper.ishermitian)
 	return env.state, x
