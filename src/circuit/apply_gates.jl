@@ -166,8 +166,6 @@ DMRG.apply!(s::AbstractQuantumGate, mps::InfiniteMPS; kwargs...) = _apply!(s, mp
 DMRG.apply!(circuit::AbstractQuantumCircuit, mps::MPS; kwargs...) = _apply!(circuit, mps; kwargs...)
 DMRG.apply!(circuit::AbstractQuantumCircuit, mps::InfiniteMPS; kwargs...) = _apply!(circuit, mps; kwargs...)
 
-DMRG.svectors_uninitialized(mps::InfiniteMPS) = false
-
 function _apply!(s::AbstractQuantumGate, mps; trunc::TruncationScheme=DefaultTruncation) 
 	(length(positions(s)) <= 4) || throw(ArgumentError("only 4-body (or less) gates are currently allowed"))
 	DMRG.svectors_uninitialized(mps) && canonicalize!(mps)
