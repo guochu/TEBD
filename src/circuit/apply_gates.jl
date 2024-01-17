@@ -57,7 +57,7 @@ end
 function _move!(psi, i::Int, j::Int, trunc::TruncationScheme)
 	L = length(psi)
 	(i <= L && j <= L) || throw(BoundsError("index out of range."))
-	DMRG.svectors_uninitialized(psi) && canonicalize!(psi)
+	svectors_uninitialized(psi) && canonicalize!(psi)
 	err = 0.
 	(i==j) && return err
 
@@ -168,7 +168,7 @@ DMRG.apply!(circuit::AbstractQuantumCircuit, mps::InfiniteMPS; kwargs...) = _app
 
 function _apply!(s::AbstractQuantumGate, mps; trunc::TruncationScheme=DefaultTruncation) 
 	(length(positions(s)) <= 4) || throw(ArgumentError("only 4-body (or less) gates are currently allowed"))
-	DMRG.svectors_uninitialized(mps) && canonicalize!(mps)
+	svectors_uninitialized(mps) && canonicalize!(mps)
 	_apply_impl(positions(s), op(s), mps, trunc)
 	return mps
 end 
