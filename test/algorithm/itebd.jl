@@ -98,7 +98,7 @@ function infinite_xxz_mpo()
 
     m = fromABCD(C=[2*sp, 2*sm, Jzz*sz], B= [sp', sm', sz], D=hz*sz)
     h = MPOHamiltonian([m])
-    U = timeevompo(h, -0.01im, InfiniteWII())
+    U = timeevompo(h, -0.01im, WII())
 
     mpo = InfiniteMPO(U)
 
@@ -131,7 +131,7 @@ function infinite_xxz_mpo2()
 
     dt = -0.01im
     dt1, dt2 = complex_stepper(dt)
-    U1, U2 = timeevompo(h, dt1, InfiniteWII()), timeevompo(h, dt2, InfiniteWII())
+    U1, U2 = timeevompo(h, dt1, WII()), timeevompo(h, dt2, WII())
 
     mpo1, mpo2 = InfiniteMPO(U1), InfiniteMPO(U2)
 
