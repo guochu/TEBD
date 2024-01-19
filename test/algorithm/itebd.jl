@@ -155,7 +155,7 @@ end
 
 
 
-@testset "TEBD: comparison with TEBD, 1st and 2nd order TimeEvoMPO" begin
+@testset "iTEBD: comparison with TEBD, 1st and 2nd order TimeEvoMPO" begin
     obs1 = finite_xxz()
     obs2 = infinite_xxz()
     @test maximum(abs, obs1 - obs2) < 1.0e-4
