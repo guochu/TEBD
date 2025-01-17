@@ -77,14 +77,14 @@ function _move!(psi, i::Int, j::Int, trunc::TruncationScheme)
 end
 
 
-function _apply_impl(kk::Tuple{Int}, m::AbstractTensorMap{S, 1, 1}, state, trunc::TruncationScheme) where S
+function _apply_impl(kk::Tuple{Int}, m::AbstractTensorMap{<:Number, S, 1, 1}, state, trunc::TruncationScheme) where S
 	key = kk[1]
 	@tensor tmp[-1 -2; -3] := m[-2, 1] * state[key][-1,1,-3]
 	state[key] = tmp
 	return 0.
 end
 
-function _apply_impl(key::Tuple{Int, Int}, m::AbstractTensorMap{S, 2, 2}, mps, trunc::TruncationScheme) where S
+function _apply_impl(key::Tuple{Int, Int}, m::AbstractTensorMap{<:Number, S, 2, 2}, mps, trunc::TruncationScheme) where S
 	i, j = key
 	if i+1==j
 		mps[j-1], mps.s[j], mps[j], err = bond_evolution(m, mps.s[j-1], mps[j-1], mps.s[j], mps[j], trunc)
@@ -112,7 +112,7 @@ function is_nn_pos(key::NTuple{N, Int}) where N
 	return true
 end
 
-function _apply_impl(key::Tuple{Int, Int, Int}, m::AbstractTensorMap{S, 3, 3}, mps, trunc::TruncationScheme) where S
+function _apply_impl(key::Tuple{Int, Int, Int}, m::AbstractTensorMap{<:Number, S, 3, 3}, mps, trunc::TruncationScheme) where S
 	i, j, k = key
 	if is_nn_pos(key)
 		mps[j-1], mps.s[j], mps[j], mps.s[j+1], mps[j+1], err = bond_evolution3(
@@ -134,7 +134,7 @@ function _apply_impl(key::Tuple{Int, Int, Int}, m::AbstractTensorMap{S, 3, 3}, m
 	return err
 end
 
-function _apply_impl(key::Tuple{Int, Int, Int, Int}, m::AbstractTensorMap{S, 4, 4}, mps, trunc::TruncationScheme) where S
+function _apply_impl(key::Tuple{Int, Int, Int, Int}, m::AbstractTensorMap{<:Number, S, 4, 4}, mps, trunc::TruncationScheme) where S
 	i, j, k, l = key
 	if is_nn_pos(key)
 		mps[j-1], mps.s[j], mps[j], mps.s[j+1], mps[j+1], mps.s[j+2], mps[j+2], err = bond_evolution4(

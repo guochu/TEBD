@@ -1,10 +1,10 @@
 abstract type AbstractQuantumGate{S} end
 
-struct QuantumGate{S <: ElementarySpace, N, M <: AbstractTensorMap{S}} <: AbstractQuantumGate{S}
+struct QuantumGate{S <: ElementarySpace, N, M <: AbstractTensorMap} <: AbstractQuantumGate{S}
 	positions::NTuple{N, Int}
 	op::M
 
-	function QuantumGate{S, N, M}(pos::NTuple{N, Int}, m::M) where {S<:ElementarySpace, N, M <: AbstractTensorMap{S, N, N}}
+	function QuantumGate{S, N, M}(pos::NTuple{N, Int}, m::M) where {S<:ElementarySpace, N, M <: AbstractTensorMap{<:Number, S, N, N}}
 		tmp = [pos...]
 		if tmp != sort(tmp)
 			pos, m = _get_norm_order(pos, m)
@@ -23,8 +23,8 @@ QuantumGate{S, N}(pos::NTuple{N, Int}, m::AbstractTensorMap) where {S<:Elementar
 		2 						  3    4
 		i                         i    i
 """
-QuantumGate(pos::NTuple{N, Int}, m::AbstractTensorMap{S}) where {S <: ElementarySpace, N} = QuantumGate{S, N}(pos, m)
-QuantumGate(pos::Int, m::AbstractTensorMap{S, 1, 1})  where {S <: ElementarySpace} = QuantumGate((pos,), m)
+QuantumGate(pos::NTuple{N, Int}, m::AbstractTensorMap{<:Number, S}) where {S <: ElementarySpace, N} = QuantumGate{S, N}(pos, m)
+QuantumGate(pos::Int, m::AbstractTensorMap{<:Number, S, 1, 1})  where {S <: ElementarySpace} = QuantumGate((pos,), m)
 
 
 GeneralHamiltonians.positions(g::QuantumGate) = g.positions
@@ -33,7 +33,7 @@ GeneralHamiltonians.op(g::QuantumGate) = g.op
 GeneralHamiltonians.shift(g::QuantumGate, i::Int) = QuantumGate(positions(g) .+ i, op(g))
 
 
-struct AdjointQuantumGate{S <: ElementarySpace, N, M <: AbstractTensorMap{S}} <: AbstractQuantumGate{S}
+struct AdjointQuantumGate{S <: ElementarySpace, N, M <: AbstractTensorMap{<:Number, S}} <: AbstractQuantumGate{S}
 	parent::QuantumGate{S, N, M}
 end
 

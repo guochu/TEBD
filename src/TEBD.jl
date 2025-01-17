@@ -14,8 +14,8 @@ export correlation_2op_1t, gs_correlation_2op_1t, correlation_2op_1τ, gs_correl
 
 using Logging: @warn
 using Reexport
-using SphericalTensors
-const TK = SphericalTensors
+using TensorKit
+const TK = TensorKit
 @reexport using DMRG, InfiniteDMRG, GeneralHamiltonians
 using DMRG: AbstractCache, ExactCache, ExpectationCache, DefaultTruncation, unsafe_mpotensor_adjoint, storage
 
